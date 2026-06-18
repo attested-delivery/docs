@@ -1,9 +1,9 @@
 ---
-title: "ADR 0059: Admission-Time Attestation Verification via Kyverno ImageValidatingPolicy"
+title: "ADR 0004: Admission-Time Attestation Verification via Kyverno ImageValidatingPolicy"
 description: "Enforces a deny-by-default Kubernetes admission webhook that rejects any workload whose image lacks a valid signature and required SLSA provenance and SBOM attestations."
 ---
 
-# ADR 0059: Admission-Time Attestation Verification via Kyverno ImageValidatingPolicy
+# ADR 0004: Admission-Time Attestation Verification via Kyverno ImageValidatingPolicy
 
 Status: Accepted
 Date: 2026-06-01
@@ -31,7 +31,7 @@ Enforcement configuration:
 - `validationActions: [Deny]` — any pod whose image digest lacks a valid cosign signature or SLSA provenance attestation is **denied**, not audited.
 - `failurePolicy: Fail` — if Kyverno is unavailable, admission is denied (fail-closed).
 - Verify cosign **keyless** signature with: `issuer: https://token.actions.githubusercontent.com`, `subject` regex matching `https://github.com/attested-delivery/*/…/.github/workflows/build.yml@refs/heads/main`.
-- Verify SLSA provenance predicate (`predicateType: https://slsa.dev/provenance/v1`) for L3 compliance per ADR 0057.
+- Verify SLSA provenance predicate (`predicateType: https://slsa.dev/provenance/v1`) for L3 compliance per ADR 0002.
 
 ### Rollout sequence
 
@@ -43,7 +43,7 @@ This decision does not replace OPA Gatekeeper for pod security standards — it 
 
 ## Implementation Details
 
-- Deploy Kyverno via the official Helm chart pinned by digest (per ADR 0063 tooling-pin policy).
+- Deploy Kyverno via the official Helm chart pinned by digest (per ADR 0008 tooling-pin policy).
 - Create `ClusterPolicy` of kind `ImageValidatingPolicy` with a `verifyImages` block per environment tier.
 - Store Kyverno policy manifests under `k8s/kyverno/` in the GitOps repo, subject to the same PR + CODEOWNERS gates as other prod manifests.
 - Export Kyverno policy report findings to Datadog/CloudWatch as a compliance metric.
@@ -69,12 +69,12 @@ This decision does not replace OPA Gatekeeper for pod security standards — it 
 
 - Fail-closed (`failurePolicy: Fail`) means a Kyverno outage blocks all pod scheduling; Kyverno HA deployment (3 replicas, PDB) is a hard prerequisite.
 - Existing images in prod that predate the attestation pipeline will fail the policy on re-deploy; a migration inventory is required before enforcing on prod.
-- `subject` regex pinned to `main` branch signature will reject hotfix images signed from `hotfix/*` branches unless the regex is updated; coordinate with ADR 0062.
+- `subject` regex pinned to `main` branch signature will reject hotfix images signed from `hotfix/*` branches unless the regex is updated; coordinate with ADR 0007.
 
 ## Relationships
 
-- **Depends on:** ADR 0056 (attestation-preserving promotion — referrers must be present in ECR for Kyverno to verify), ADR 0057 (SLSA L3 provenance is the predicate Kyverno verifies), ADR 0063 (Kyverno Helm chart pinned by digest per tooling-pin policy).
-- **Related:** ADR 0058 (SBOM referrer optional additional verification predicate), ADR 0062 (branching policy — Kyverno `subject` regex pinned to `main` must be updated for hotfix branches per that ADR's guidance).
+- **Depends on:** ADR 0001 (attestation-preserving promotion — referrers must be present in ECR for Kyverno to verify), ADR 0002 (SLSA L3 provenance is the predicate Kyverno verifies), ADR 0008 (Kyverno Helm chart pinned by digest per tooling-pin policy).
+- **Related:** ADR 0003 (SBOM referrer optional additional verification predicate), ADR 0007 (branching policy — Kyverno `subject` regex pinned to `main` must be updated for hotfix branches per that ADR's guidance).
 
 ## Well-Architected Alignment
 

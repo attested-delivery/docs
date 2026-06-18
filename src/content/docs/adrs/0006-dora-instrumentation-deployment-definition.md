@@ -1,9 +1,9 @@
 ---
-title: "ADR 0061: DORA Instrumentation — Deployment Definition and Five-Event Pipeline"
+title: "ADR 0006: DORA Instrumentation — Deployment Definition and Five-Event Pipeline"
 description: "Defines a deployment as a production digest promotion event and instruments all five DORA metrics with AI-cohort segmentation."
 ---
 
-# ADR 0061: DORA Instrumentation — Deployment Definition and Five-Event Pipeline
+# ADR 0006: DORA Instrumentation — Deployment Definition and Five-Event Pipeline
 
 Status: Accepted
 Date: 2026-06-01
@@ -39,7 +39,7 @@ Instrument **five DORA events** using existing tooling, without deploying new in
 
 Add **`gate_N_duration_seconds`** telemetry at each promotion gate boundary (INT, CERT, CCAB) to expose the CCAB 24–48 h window as a separate, labeled metric — decoupling automation latency from approval latency in lead time dashboards (f_dora_metrics_14).
 
-Segment all metrics by **AI authorship cohort** using the `AI-Authoring-Mode` confidence weight from ADR 0060 git-creep trailers. This provides the per-digest AI vs. human stability comparison the DORA 2025 AI-capabilities model requires (f_dora_metrics_10).
+Segment all metrics by **AI authorship cohort** using the `AI-Authoring-Mode` confidence weight from ADR 0005 git-creep trailers. This provides the per-digest AI vs. human stability comparison the DORA 2025 AI-capabilities model requires (f_dora_metrics_10).
 
 DORA metrics are computed on prod only. No new tooling required: GitHub Actions webhooks + Argo CD Prometheus metrics + PagerDuty → OTel pipeline → Datadog (or Grafana + Prometheus) (f_dora_metrics_16, f_dora_metrics_12).
 
@@ -72,12 +72,12 @@ DORA metrics are computed on prod only. No new tooling required: GitHub Actions 
 
 - Prod Argo CD `Synced+Healthy` may be delayed by slow canary analysis (Argo Rollouts); gate timing must account for canary duration to avoid false "deployment complete" signals.
 - PagerDuty → digest join requires consistent digest labeling on PagerDuty incidents; an operational convention must be established.
-- AI-cohort segmentation is only as good as ADR 0060 trailer coverage; commits without trailers fall into an "untracked" cohort that may skew stability metrics.
+- AI-cohort segmentation is only as good as ADR 0005 trailer coverage; commits without trailers fall into an "untracked" cohort that may skew stability metrics.
 
 ## Relationships
 
-- **Depends on:** ADR 0056 (deployment event anchored to a verified prod digest promotion), ADR 0060 (AI-authoring-mode trailers provide cohort segmentation input).
-- **Related:** ADR 0062 (GitHub Flow — deployment is anchored to the prod promote step, not a branch merge, consistent with the branching policy).
+- **Depends on:** ADR 0001 (deployment event anchored to a verified prod digest promotion), ADR 0005 (AI-authoring-mode trailers provide cohort segmentation input).
+- **Related:** ADR 0007 (GitHub Flow — deployment is anchored to the prod promote step, not a branch merge, consistent with the branching policy).
 
 ## Well-Architected Alignment
 

@@ -1,9 +1,9 @@
 ---
-title: "ADR 0057: Declare SLSA Build Level 3 via Isolated Reusable Signing Workflow"
+title: "ADR 0002: Declare SLSA Build Level 3 via Isolated Reusable Signing Workflow"
 description: "Declares SLSA Build Level 3 by isolating the build-and-sign step into a reusable GitHub Actions workflow with an ephemeral Sigstore Fulcio identity."
 ---
 
-# ADR 0057: Declare SLSA Build Level 3 via Isolated Reusable Signing Workflow
+# ADR 0002: Declare SLSA Build Level 3 via Isolated Reusable Signing Workflow
 
 Status: Accepted
 Date: 2026-06-01
@@ -34,7 +34,7 @@ Achieve L3 by:
 3. The resulting SLSA provenance predicate (`predicateType: https://slsa.dev/provenance/v1`) is attached to the image digest as an OCI referrer via `cosign attest`.
 4. GitHub OIDC ephemeral credentials (Fulcio CA + Rekor transparency log) satisfy L3 key isolation without change.
 
-SLSA L3 provenance is a build-time deliverable; ADR 0058 governs SBOM attachment; ADR 0059 governs admission-time verification that L3 provenance is present.
+SLSA L3 provenance is a build-time deliverable; ADR 0003 governs SBOM attachment; ADR 0004 governs admission-time verification that L3 provenance is present.
 
 ## Implementation Details
 
@@ -48,7 +48,7 @@ SLSA L3 provenance is a build-time deliverable; ADR 0058 governs SBOM attachment
 
 - **Remain at SLSA L2 (`actions/attest-build-provenance` default).** Rejected: L3 is achievable at low cost because GitHub OIDC ephemeral credentials already satisfy key isolation; L2 leaves provenance falsification risk from a compromised build job; EO 14028 expectations and EU CRA trajectory favor L3 declaration.
 - **SLSA L4 (hermetic builds).** Not adopted: requires fully hermetic build environments (network isolation, reproducible builds) — disproportionate cost for the current substrate.
-- **Commercial signing service (JFrog, Chainguard).** Not adopted at this stage; the OSS stack (cosign + Fulcio + Rekor) meets L3; commercial justified above ~200 images (see ADR 0063 for tooling policy).
+- **Commercial signing service (JFrog, Chainguard).** Not adopted at this stage; the OSS stack (cosign + Fulcio + Rekor) meets L3; commercial justified above ~200 images (see ADR 0008 for tooling policy).
 
 ## Consequences
 
@@ -67,9 +67,9 @@ SLSA L3 provenance is a build-time deliverable; ADR 0058 governs SBOM attachment
 
 ## Relationships
 
-- **Depends on:** ADR 0056 (attestation-preserving promotion — ensures L3 provenance travels to ECR).
-- **Depended on by:** ADR 0058 (SBOM format selection cites SLSA L3 context), ADR 0059 (admission policy verifies L3 predicate), ADR 0060 (AI provenance injected into SLSA `externalParameters` before signing).
-- **Related:** ADR 0063 (security tooling pinned by digest — signing workflow itself pinned to avoid supply-chain attack).
+- **Depends on:** ADR 0001 (attestation-preserving promotion — ensures L3 provenance travels to ECR).
+- **Depended on by:** ADR 0003 (SBOM format selection cites SLSA L3 context), ADR 0004 (admission policy verifies L3 predicate), ADR 0005 (AI provenance injected into SLSA `externalParameters` before signing).
+- **Related:** ADR 0008 (security tooling pinned by digest — signing workflow itself pinned to avoid supply-chain attack).
 
 ## Well-Architected Alignment
 

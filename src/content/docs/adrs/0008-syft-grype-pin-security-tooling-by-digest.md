@@ -1,9 +1,9 @@
 ---
-title: "ADR 0063: Syft + Grype as Security Toolchain; Pin All Security Tooling by Digest"
+title: "ADR 0008: Syft + Grype as Security Toolchain; Pin All Security Tooling by Digest"
 description: "Pins Syft and Grype by digest rather than tag to prevent supply-chain compromise via mutable security tooling tags."
 ---
 
-# ADR 0063: Syft + Grype as Security Toolchain; Pin All Security Tooling by Digest
+# ADR 0008: Syft + Grype as Security Toolchain; Pin All Security Tooling by Digest
 
 Status: Accepted
 Date: 2026-06-01
@@ -17,7 +17,7 @@ The incident demonstrates a general failure mode: **mutable-tag references to se
 Two additional factors drive the tooling selection:
 
 1. **Trivy's compromise disqualifies it.** Beyond the immediate CVE, the incident revealed that `trivy-action`'s release process did not enforce immutable artifact references in its own CI — a structural hygiene gap inconsistent with SLSA L3 expectations (f_tooling_landscape_build_vs_buy_2).
-2. **Syft + Grype are the natural counterparts for this design.** Syft generates CycloneDX 1.6 and SPDX 2.3 natively (ADR 0058's chosen formats). Grype consumes Syft SBOMs directly and supports VEX-aware triage aligned with CycloneDX 1.6 VEX fields. Both are maintained by Anchore under a permissive Apache-2.0 license, with active SLSA provenance published for their own releases (f_tooling_landscape_build_vs_buy_2, f_tooling_landscape_build_vs_buy_4).
+2. **Syft + Grype are the natural counterparts for this design.** Syft generates CycloneDX 1.6 and SPDX 2.3 natively (ADR 0003's chosen formats). Grype consumes Syft SBOMs directly and supports VEX-aware triage aligned with CycloneDX 1.6 VEX fields. Both are maintained by Anchore under a permissive Apache-2.0 license, with active SLSA provenance published for their own releases (f_tooling_landscape_build_vs_buy_2, f_tooling_landscape_build_vs_buy_4).
 
 ## Decision
 
@@ -25,8 +25,8 @@ Two additional factors drive the tooling selection:
 
 2. **Pin ALL security tooling references by digest — never by mutable tag.** This applies to:
    - GitHub Actions `uses:` references: `uses: anchore/scan-action@<sha256-digest>` not `@v3`.
-   - `slsa-framework/slsa-github-generator` and any other reusable workflow (ADR 0057).
-   - Kyverno Helm chart (ADR 0059).
+   - `slsa-framework/slsa-github-generator` and any other reusable workflow (ADR 0002).
+   - Kyverno Helm chart (ADR 0004).
    - cosign, oras, crane binaries installed in build steps — installed from a digest-pinned release asset, not `latest`.
 
 3. **Establish a digest-pin refresh cadence:** pin digests are updated monthly (or immediately on a published CVE for the pinned version) via a dedicated `chore/update-digest-pins` PR. The PR must pass the full CI gate and receive CODEOWNERS approval before merge.
@@ -53,7 +53,7 @@ Two additional factors drive the tooling selection:
 ### Positive
 
 - Eliminates the mutable-tag attack surface for all security tooling; any supply-chain compromise of a pinned tool is detectable as a digest mismatch.
-- Syft's native CycloneDX 1.6 + SPDX 2.3 output aligns with ADR 0058 format decisions without a conversion step.
+- Syft's native CycloneDX 1.6 + SPDX 2.3 output aligns with ADR 0003 format decisions without a conversion step.
 - Grype's direct SBOM consumption enables VEX-aware triage; false-positive noise is reduced without manual triage overhead.
 - Digest-pin manifest provides an auditable record of the exact tooling versions used in every build.
 
@@ -65,9 +65,9 @@ Two additional factors drive the tooling selection:
 
 ## Relationships
 
-- **Supports:** ADR 0058 (Syft as the SBOM generator — CycloneDX 1.6 output), ADR 0056 (attestation-preserving promotion — Grype re-attestation schedule for promoted digests).
-- **Referenced by:** ADR 0057 (tooling-pin policy cited for the `slsa-github-generator` reusable workflow pin), ADR 0059 (Kyverno Helm chart pinned by digest per this policy).
-- **Related:** ADR 0062 (GitHub Flow — hotfix branches must also pass the Grype gate before merge to `main`).
+- **Supports:** ADR 0003 (Syft as the SBOM generator — CycloneDX 1.6 output), ADR 0001 (attestation-preserving promotion — Grype re-attestation schedule for promoted digests).
+- **Referenced by:** ADR 0002 (tooling-pin policy cited for the `slsa-github-generator` reusable workflow pin), ADR 0004 (Kyverno Helm chart pinned by digest per this policy).
+- **Related:** ADR 0007 (GitHub Flow — hotfix branches must also pass the Grype gate before merge to `main`).
 
 ## Well-Architected Alignment
 

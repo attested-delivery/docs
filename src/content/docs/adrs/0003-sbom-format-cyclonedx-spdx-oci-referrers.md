@@ -1,9 +1,9 @@
 ---
-title: "ADR 0058: SBOM Format — CycloneDX 1.6 Primary + SPDX 2.3/3.0 Export via OCI Referrers"
+title: "ADR 0003: SBOM Format — CycloneDX 1.6 Primary + SPDX 2.3/3.0 Export via OCI Referrers"
 description: "Selects CycloneDX 1.6 as primary SBOM format with SPDX 2.3 as secondary, stored as OCI referrers using the cosign SBOM attestation type."
 ---
 
-# ADR 0058: SBOM Format — CycloneDX 1.6 Primary + SPDX 2.3/3.0 Export via OCI Referrers
+# ADR 0003: SBOM Format — CycloneDX 1.6 Primary + SPDX 2.3/3.0 Export via OCI Referrers
 
 Status: Accepted
 Date: 2026-06-01
@@ -12,7 +12,7 @@ Date: 2026-06-01
 
 An SDLC that mandates SBOM generation for all container images and Helm charts without specifying the format or attachment mechanism leaves format negotiation to individual teams and breaks downstream tooling interoperability (f_supply_chain_security_sbom_1). Two formats dominate the ecosystem: **SPDX** (ISO/IEC 5962:2021) and **CycloneDX**; and the SBOM must also **survive promotion** to be useful at admission time.
 
-Generating an SBOM file without attaching it to the image digest via OCI referrers decouples the SBOM from the artifact it describes and makes admission-time verification mechanically impossible (f_supply_chain_security_sbom_18). This decision depends on ADR 0056 (attestation-preserving promotion): once referrers travel with the digest, an SBOM attached as a referrer travels automatically.
+Generating an SBOM file without attaching it to the image digest via OCI referrers decouples the SBOM from the artifact it describes and makes admission-time verification mechanically impossible (f_supply_chain_security_sbom_18). This decision depends on ADR 0001 (attestation-preserving promotion): once referrers travel with the digest, an SBOM attached as a referrer travels automatically.
 
 ### Format evaluation
 
@@ -27,11 +27,11 @@ Adopt **CycloneDX 1.6 as the primary SBOM format** for all container images and 
 
 Additionally, generate a **SPDX 2.3/3.0 export** for procurement and regulatory contexts that require the ISO format.
 
-Attach the SBOM to the **image digest via OCI referrers** using `cosign attest --predicate <sbom.cdx.json> --type cyclonedx` (or the Syft-native `syft attest`) so the SBOM co-locates with the digest in the registry and survives promotion once ADR 0056 is in effect.
+Attach the SBOM to the **image digest via OCI referrers** using `cosign attest --predicate <sbom.cdx.json> --type cyclonedx` (or the Syft-native `syft attest`) so the SBOM co-locates with the digest in the registry and survives promotion once ADR 0001 is in effect.
 
 Map CISA 2025 extended fields into the CycloneDX 1.6 `metadata.tools`, `metadata.authors`, `components[].hashes`, and `components[].licenses` fields at generation time. Validate completeness with `cyclonedx-cli validate --input-format json`.
 
-Tooling: **Syft** (post-Trivy; see ADR 0063) generates CycloneDX 1.6 and SPDX 2.3 natively from container images and source trees without requiring a running container.
+Tooling: **Syft** (post-Trivy; see ADR 0008) generates CycloneDX 1.6 and SPDX 2.3 natively from container images and source trees without requiring a running container.
 
 ## Implementation Details
 
@@ -53,7 +53,7 @@ Tooling: **Syft** (post-Trivy; see ADR 0063) generates CycloneDX 1.6 and SPDX 2.
 
 ### Positive
 
-- SBOM co-locates with the digest in ECR; admission-time SBOM verification becomes mechanically possible via ADR 0059.
+- SBOM co-locates with the digest in ECR; admission-time SBOM verification becomes mechanically possible via ADR 0004.
 - CycloneDX 1.6 VEX fields enable VEX-aware vulnerability triage to distinguish known-unexploitable from true positives.
 - CISA 2025 and NTIA 2021 minimum element compliance satisfied at generation time.
 - Dual-format output (CycloneDX + SPDX) satisfies both OSS-ecosystem and procurement/procurement/federal requirements without dual tool chains.
@@ -66,9 +66,9 @@ Tooling: **Syft** (post-Trivy; see ADR 0063) generates CycloneDX 1.6 and SPDX 2.
 
 ## Relationships
 
-- **Depends on:** ADR 0056 (attestation-preserving promotion — SBOM referrer must travel on copy), ADR 0057 (SLSA L3 context — SBOM is one of the referrers alongside SLSA provenance).
-- **Depended on by:** ADR 0059 (admission policy may optionally verify SBOM referrer presence), ADR 0063 (Syft as SBOM generator — pinned by digest).
-- **Related:** ADR 0061 (issue-driven promotion YAML payload carries SBOM digest for audit traceability).
+- **Depends on:** ADR 0001 (attestation-preserving promotion — SBOM referrer must travel on copy), ADR 0002 (SLSA L3 context — SBOM is one of the referrers alongside SLSA provenance).
+- **Depended on by:** ADR 0004 (admission policy may optionally verify SBOM referrer presence), ADR 0008 (Syft as SBOM generator — pinned by digest).
+- **Related:** ADR 0006 (issue-driven promotion YAML payload carries SBOM digest for audit traceability).
 
 ## Well-Architected Alignment
 

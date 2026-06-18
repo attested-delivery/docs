@@ -1,9 +1,9 @@
 ---
-title: "ADR 0056: Attestation-Preserving Digest Promotion"
+title: "ADR 0001: Attestation-Preserving Digest Promotion"
 description: "Establishes sha256 digest as the canonical promotion key and mandates referrer-aware copy to preserve SLSA provenance, SBOM, and signature attestations across registry boundaries."
 ---
 
-# ADR 0056: Attestation-Preserving Digest Promotion
+# ADR 0001: Attestation-Preserving Digest Promotion
 
 Status: Accepted
 Date: 2026-06-01
@@ -38,7 +38,7 @@ The digest-as-canonical-identity invariant is the foundation of this design; thi
 - Add `cosign verify-attestation --type slsa --certificate-oidc-issuer https://token.actions.githubusercontent.com` as the mandatory final step of every promote workflow.
 - Enable ECR tag immutability on all promotion target repositories (prerequisite for managed signing).
 - Document the `crane digest` → `cosign verify-attestation` gate change in the promotion runbook.
-- The issue-driven promotion YAML payload (ADR 0061) is unchanged; the attestation gate result is logged as a promotion issue comment.
+- The issue-driven promotion YAML payload (ADR 0006) is unchanged; the attestation gate result is logged as a promotion issue comment.
 
 ## Alternatives Considered
 
@@ -63,8 +63,8 @@ The digest-as-canonical-identity invariant is the foundation of this design; thi
 
 ## Relationships
 
-- **Relied on by:** ADR 0058 (SBOM via OCI referrers requires referrers to travel on promotion), ADR 0059 (admission-time verification requires referrers present in ECR), ADR 0062 (branching policy — the release candidate is the attested digest, not a branch).
-- **Related:** ADR 0061 (DORA — deployment event anchored to a verified prod digest promotion).
+- **Relied on by:** ADR 0003 (SBOM via OCI referrers requires referrers to travel on promotion), ADR 0004 (admission-time verification requires referrers present in ECR), ADR 0007 (branching policy — the release candidate is the attested digest, not a branch).
+- **Related:** ADR 0006 (DORA — deployment event anchored to a verified prod digest promotion).
 
 ## Well-Architected Alignment
 
