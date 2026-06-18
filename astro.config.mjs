@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 export default defineConfig({
   site: 'https://attested-delivery.github.io',
   base: '/docs',
+  markdown: {
+    remarkPlugins: [remarkMermaid],
+  },
   vite: {
     ssr: {
       noExternal: ['unist-util-visit', 'unist-util-visit-parents'],
@@ -13,6 +17,9 @@ export default defineConfig({
     starlight({
       title: 'Attested Delivery',
       description: 'Documentation for the attested-delivery GitHub organization: signed, SLSA-attested, fail-closed-verified releases.',
+      components: {
+        Head: './src/components/Head.astro',
+      },
       sidebar: [
         { label: 'Overview', link: '/overview/' },
         {

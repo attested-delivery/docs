@@ -1,0 +1,29 @@
+---
+// Starlight Head override: render the default head, then bundle a client-side
+// mermaid initializer that renders any <pre class="mermaid"> blocks. Bundled
+// locally (no runtime CDN) to keep the supply chain self-contained.
+import Default from '@astrojs/starlight/components/Head.astro';
+---
+
+<Default><slot /></Default>
+
+<script>
+  import mermaid from 'mermaid';
+
+  function currentTheme() {
+    return document.documentElement.dataset.theme === 'light' ? 'default' : 'dark';
+  }
+
+  mermaid.initialize({ startOnLoad: false, theme: currentTheme(), securityLevel: 'strict' });
+
+  async function render() {
+    const nodes = document.querySelectorAll('pre.mermaid:not([data-processed])');
+    if (nodes.length) {
+      await mermaid.run({ nodes: Array.from(nodes) });
+    }
+  }
+
+  // Initial load + every Starlight (view-transition) navigation.
+  document.addEventListener('astro:page-load', render);
+  if (document.readyState !== 'loading') render();
+</script>
