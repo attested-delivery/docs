@@ -1,0 +1,25 @@
+---
+title: Attested Delivery
+description: Signed, SLSA-attested, fail-closed-verified releases for every artifact.
+template: splash
+hero:
+  tagline: Every artifact provably identical to what was validated. No exceptions.
+  actions:
+    - text: Get Started
+      link: /overview/
+      icon: right-arrow
+      variant: primary
+    - text: View Concepts
+      link: /concepts/01-the-digest-is-the-release/
+      icon: open-book
+---
+
+## The core invariant
+
+An artifact reaches consumers only if it is byte-identical to what was validated, carries re-verifiable attestations (SLSA provenance, cosign signature, SBOM, vulnerability report), and publication is fail-closed gated on verification.
+
+## What you will find here
+
+- **Concepts** — ten focused articles on the design decisions behind attested delivery: digest identity, GitHub Flow, attestation survival across registry hops, admission enforcement, SLSA levels, SBOMs, supply-chain hazards, DORA, AI provenance, and pipeline observability.
+- **Specifications** — formal specs for the promotion pipeline, interface contracts, production readiness gates, and GitHub-native quality gates.
+- **Architecture Decisions** — eight ADRs recording the rationale behind every significant technical choice, from digest promotion to security tooling pins.
