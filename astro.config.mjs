@@ -17,6 +17,9 @@ export default defineConfig({
     starlight({
       title: 'Attested Delivery',
       description: 'Documentation for the attested-delivery GitHub organization: signed, SLSA-attested, fail-closed-verified releases.',
+      social: [
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/attested-delivery' },
+      ],
       components: {
         Head: './src/components/Head.astro',
       },
