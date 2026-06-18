@@ -1,0 +1,76 @@
+---
+// Per-page comments for docs, backed by GitHub Discussions on
+// attested-delivery/.github (the repo that also backs org-level discussions).
+// Real IDs — no placeholders. Requires the giscus GitHub App to be installed on
+// attested-delivery/.github; until then the widget shows a "not installed" note.
+//
+// Loaded dynamically on each `astro:page-load` so Starlight's client-side
+// navigation gives every page its own thread (mapping: pathname), and the giscus
+// theme follows Starlight's light/dark toggle.
+const repo = 'attested-delivery/.github';
+const repoId = 'R_kgDOS-WGuw';
+const category = 'General';
+const categoryId = 'DIC_kwDOS-WGu84C_axy';
+const orgDiscussions = 'https://github.com/orgs/attested-delivery/discussions';
+---
+
+<section class="giscus-wrap" aria-label="Comments">
+  <h2 class="giscus-heading">Discussion</h2>
+  <p class="giscus-sub">
+    Comments are powered by <a href={orgDiscussions}>GitHub Discussions</a>. Sign in with GitHub to
+    ask a question or share how this applies in your org.
+  </p>
+  <div id="giscus-thread"></div>
+</section>
+
+<script is:inline define:vars={{ repo, repoId, category, categoryId }}>
+  function giscusTheme() {
+    return document.documentElement.dataset.theme === 'light' ? 'light' : 'noborder_dark';
+  }
+
+  function loadGiscus() {
+    const container = document.getElementById('giscus-thread');
+    if (!container) return;
+    container.innerHTML = '';
+    const s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    const attrs = {
+      'data-repo': repo,
+      'data-repo-id': repoId,
+      'data-category': category,
+      'data-category-id': categoryId,
+      'data-mapping': 'pathname',
+      'data-strict': '1',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'top',
+      'data-theme': giscusTheme(),
+      'data-lang': 'en',
+    };
+    for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+    container.appendChild(s);
+  }
+
+  function syncTheme() {
+    const frame = document.querySelector('iframe.giscus-frame');
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme() } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  document.addEventListener('astro:page-load', loadGiscus);
+  if (document.readyState !== 'loading') loadGiscus();
+
+  if (!window.__giscusThemeObserver) {
+    window.__giscusThemeObserver = new MutationObserver(syncTheme);
+    window.__giscusThemeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
+</script>

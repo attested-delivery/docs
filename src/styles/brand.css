@@ -1,0 +1,143 @@
+/*
+ * attested-delivery brand theme for Starlight.
+ *
+ * Maps the "trust under threat" palette onto Starlight's theming variables so
+ * the docs match the marketing site (attested-delivery.github.io). Values mirror
+ * that repo's design-system/tokens.json — the canonical source of truth. Keep
+ * the two in sync: near-black field, a single verified-green accent, threat-red
+ * and caution-amber as semantic states only.
+ */
+
+/* ---- Dark theme (default) ---------------------------------------------- */
+:root {
+  /* Brand token aliases (mirror tokens.json) */
+  --ad-accent: #36d399;
+  --ad-accent-strong: #1fb47c;
+  --ad-accent-soft: #0f2a22;
+  --ad-threat: #ff5c6c;
+  --ad-caution: #f4b740;
+
+  /* Verified-green accent */
+  --sl-color-accent-low: #0f3325;
+  --sl-color-accent: #1fb47c;
+  --sl-color-accent-high: #7af0c2;
+
+  /* Cool blue-black gray ramp: white = brightest text … black = page bg */
+  --sl-color-white: #e8eef6;
+  --sl-color-gray-1: #d4dcea;
+  --sl-color-gray-2: #aebccf;
+  --sl-color-gray-3: #7c8aa0;
+  --sl-color-gray-4: #4a5a73;
+  --sl-color-gray-5: #2e3a4d;
+  --sl-color-gray-6: #151b27;
+  --sl-color-black: #0e121b;
+
+  /* Typography — brand stacks (system-aligned, matches the marketing site) */
+  --sl-font:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --sl-font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+}
+
+/* ---- Light theme ------------------------------------------------------- */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #c4f5e1;
+  --sl-color-accent: #128a5e;
+  --sl-color-accent-high: #0a3a28;
+
+  --sl-color-white: #0e121b;
+  --sl-color-gray-1: #1c2433;
+  --sl-color-gray-2: #3a465b;
+  --sl-color-gray-3: #5a6678;
+  --sl-color-gray-4: #8593a6;
+  --sl-color-gray-5: #c3ccd9;
+  --sl-color-gray-6: #eef1f6;
+  --sl-color-gray-7: #f7f9fc;
+  --sl-color-black: #ffffff;
+}
+
+/* ---- Shared accents ---------------------------------------------------- */
+
+/* Top nav: a hairline accent so the brand reads immediately. */
+.header {
+  border-bottom: 1px solid var(--sl-color-hairline-shade);
+  background: color-mix(in srgb, var(--sl-color-bg) 86%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+/* The site title sits next to the hexagon mark — give it brand weight. */
+.site-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Inline code reads as "a value you could copy and run". */
+:not(pre) > code {
+  color: var(--sl-color-accent-high);
+  background: var(--ad-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--ad-accent) 22%, transparent);
+}
+
+:root[data-theme='light'] :not(pre) > code {
+  color: var(--sl-color-accent-high);
+  background: color-mix(in srgb, var(--ad-accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--ad-accent) 28%, transparent);
+}
+
+/* ---- Splash hero polish ------------------------------------------------ */
+
+/* Faint grid behind the splash hero — the marketing site's "hostile field". */
+.hero {
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -2rem -50vw 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--sl-color-gray-5) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sl-color-gray-5) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black 0%, transparent 72%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero::before {
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black 0%, transparent 72%);
+  }
+}
+
+/* Hero tagline in the verified-green accent for continuity with the homepage. */
+.hero .tagline {
+  color: var(--sl-color-gray-2);
+}
+
+.hero h1 {
+  letter-spacing: -0.02em;
+}
+
+/* ---- Giscus discussion thread ------------------------------------------ */
+
+.giscus-wrap {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--sl-color-hairline);
+}
+
+.giscus-heading {
+  font-size: var(--sl-text-h2);
+  margin-bottom: 0.25rem;
+}
+
+.giscus-sub {
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+  margin-bottom: 1.5rem;
+}
+
+#giscus-thread {
+  width: 100%;
+}

@@ -1,0 +1,13 @@
+---
+// Override of Starlight's Footer: render the default footer, then append a
+// per-page giscus discussion thread on content pages. Splash pages (the
+// landing) opt out — they link to org discussions instead.
+import Default from '@astrojs/starlight/components/Footer.astro';
+import Giscus from './Giscus.astro';
+
+const { entry } = Astro.locals.starlightRoute;
+const showComments = entry.data.template !== 'splash';
+---
+
+<Default><slot /></Default>
+{showComments && <Giscus />}

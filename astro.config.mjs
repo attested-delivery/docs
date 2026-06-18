@@ -17,11 +17,20 @@ export default defineConfig({
     starlight({
       title: 'Attested Delivery',
       description: 'Documentation for the attested-delivery GitHub organization: signed, SLSA-attested, fail-closed-verified releases.',
+      logo: { src: './src/assets/logo-mark.svg' },
+      favicon: '/favicon.svg',
+      customCss: ['./src/styles/brand.css'],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/attested-delivery' },
+        {
+          icon: 'comment',
+          label: 'Org Discussions',
+          href: 'https://github.com/orgs/attested-delivery/discussions',
+        },
       ],
       components: {
         Head: './src/components/Head.astro',
+        Footer: './src/components/DocFooter.astro',
       },
       sidebar: [
         { label: 'Overview', link: '/overview/' },
