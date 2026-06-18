@@ -3,8 +3,6 @@ title: "ADR 0001: Attestation-Preserving Digest Promotion"
 description: "Establishes sha256 digest as the canonical promotion key and mandates referrer-aware copy to preserve SLSA provenance, SBOM, and signature attestations across registry boundaries."
 ---
 
-# ADR 0001: Attestation-Preserving Digest Promotion
-
 Status: Accepted
 Date: 2026-06-01
 

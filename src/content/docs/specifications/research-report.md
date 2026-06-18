@@ -3,8 +3,6 @@ title: "Research Report"
 description: "Comprehensive research report on enterprise-grade SDLC on GitHub Flow with attested artifact promotion, SBOM, and supply-chain security."
 ---
 
-# Enterprise-Grade SDLC on GitHub Flow: Attested Artifact Promotion, SBOM & Supply-Chain Security
-
 **Research ID:** `enterprise-sdlc-gitflow-attestation`
 **Date:** 2026-06-01 (updated 2026-06-02)
 **Findings:** 235 across 14 dimensions · 235+ web sources (every claim with `fetched_at` + verbatim snippet), corroborated against one examined production implementation (an internal AWS platform, anonymized)

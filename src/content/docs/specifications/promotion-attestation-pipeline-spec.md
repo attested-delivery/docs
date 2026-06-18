@@ -3,8 +3,6 @@ title: "Promotion Attestation Pipeline Specification"
 description: "Specification for the referrer-aware OCI promotion pipeline that carries SLSA provenance, SBOM, and signatures across registry boundaries."
 ---
 
-# Promotion + Attestation Pipeline Specification
-
 **Document type:** Implementation-Actionable Derived Artifact (corpus-internal)
 **Research topic:** `enterprise-sdlc-gitflow-attestation`
 **Grounded in:** SLSA v1.1, in-toto, Sigstore, OCI 1.1 referrers, Kyverno; field-validated against one examined production implementation (an anonymized reference implementation, §16 of RESEARCH-REPORT.md)

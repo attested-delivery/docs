@@ -3,8 +3,6 @@ title: "GitHub Native Attested Quality Gates"
 description: "Specification for GitHub-native quality gates including CodeQL, OSV-Scanner, Trivy, and Scorecard with signed attestation outputs."
 ---
 
-# Attested Quality Gates with GitHub-Native, Free-for-Open-Source Tooling
-
 **Document type:** Implementation-actionable design guide (corpus-internal)
 **Research topic:** `enterprise-sdlc-gitflow-attestation`
 **Date:** 2026-06-15

@@ -3,8 +3,6 @@ title: "ADR 0007: GitHub Flow with Artifact-Promotion Branching Policy"
 description: "Adopts GitHub Flow with short-lived feature branches, immutable tags, and the attested digest as the unit of release, rejecting git-flow for this continuous-delivery profile."
 ---
 
-# ADR 0007: GitHub Flow with Artifact-Promotion Branching Policy
-
 Status: Accepted
 Date: 2026-06-01
 

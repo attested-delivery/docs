@@ -3,8 +3,6 @@ title: "Interface Contracts"
 description: "Formal interface contracts for the attested delivery pipeline components including registry APIs, attestation schemas, and admission webhook contracts."
 ---
 
-# Interface Contracts — Attested-SDLC Integration Boundaries
-
 This document is the authoritative, **recipient-independent** definition of the integration boundaries of the
 attested-delivery architecture. Each boundary is a named **interface contract**: a producer or gate on one side
 emits or checks evidence in a defined shape, and any implementation that satisfies the contract interoperates
