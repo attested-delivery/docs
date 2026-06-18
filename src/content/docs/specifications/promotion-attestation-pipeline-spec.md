@@ -7,7 +7,7 @@ description: "Specification for the referrer-aware OCI promotion pipeline that c
 **Research topic:** `enterprise-sdlc-gitflow-attestation`
 **Grounded in:** SLSA v1.1, in-toto, Sigstore, OCI 1.1 referrers, Kyverno; field-validated against one examined production implementation (an anonymized reference implementation, §16 of RESEARCH-REPORT.md)
 **Date:** 2026-06-01
-**Status:** DRAFT — encodes design decisions ADR-0001–0063
+**Status:** DRAFT — encodes design decisions ADR-0001–0008
 
 > Finding IDs (`f_<dim>_<n>`) reference `reports/enterprise-sdlc-gitflow-attestation/findings_*.json`.
 > External/value-add outputs derived from this spec must strip IDs and re-cite primary sources
@@ -86,7 +86,7 @@ conformance with the probes under `conformance/` — independent of this corpus.
 | **Gate / exit criteria** | `local_validation_confirmed=true` in Terraform state; pre-commit returns 0; Checkov 0 critical/high |
 | **Failure behavior** | null_resource fails apply; developer fixes in local environment; no cloud resource touched |
 
-**Note:** Any deprecated IaC scanner (`tfsec` or similar) must be replaced — **excluding** `trivy-action` (CVE-2026-33634, CRITICAL; f_supply_chain_security_sbom tooling warning; ADR-0008 mandates Syft+Grype and digest-pinned security tooling).
+**Note:** Any deprecated IaC scanner (`tfsec` or similar) must be replaced — **excluding** `trivy-action` (CVE-2026-33634, CRITICAL; f_supply_chain_security_sbom tooling warning; [ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/) mandates Syft+Grype and digest-pinned security tooling).
 
 ---
 
@@ -112,17 +112,17 @@ conformance with the probes under `conformance/` — independent of this corpus.
 | --- | --- |
 | **Trigger** | Successful completion of S1; called as an **isolated reusable workflow** (required for SLSA L3) |
 | **Inputs** | `image_digest` (sha256) from S1; GitHub OIDC token (`id-token: write`) |
-| **Actions** | (1) `actions/attest-build-provenance` in isolated reusable workflow → SLSA v1.0 Build L3 provenance DSSE; (2) `syft` generates CycloneDX 1.6 SBOM → `cosign attest` attaches to digest; (3) Grype scans SBOM → result cosign-attested with `in-toto` vuln-scan predicate; (4) `cosign attest` attaches in-toto test-result predicate (PASSED/WARNED/FAILED) for unit + IaC tests from S0/S1; (5) `cosign attest` attaches AI-provenance predicate (git-creep 18-key trailer schema) if commit carries `AI-Tool` trailers (ADR-0005); (6) `cosign sign` on the digest (Path A: keyless Fulcio/Rekor v2; Path B: `notation sign` for image signature only) |
+| **Actions** | (1) `actions/attest-build-provenance` in isolated reusable workflow → SLSA v1.0 Build L3 provenance DSSE; (2) `syft` generates CycloneDX 1.6 SBOM → `cosign attest` attaches to digest; (3) Grype scans SBOM → result cosign-attested with `in-toto` vuln-scan predicate; (4) `cosign attest` attaches in-toto test-result predicate (PASSED/WARNED/FAILED) for unit + IaC tests from S0/S1; (5) `cosign attest` attaches AI-provenance predicate (git-creep 18-key trailer schema) if commit carries `AI-Tool` trailers ([ADR-0005](/docs/adrs/0005-ai-provenance-git-trailers/)); (6) `cosign sign` on the digest (Path A: keyless Fulcio/Rekor v2; Path B: `notation sign` for image signature only) |
 | **Attestations produced** | SLSA v1.0 L3 provenance (`https://slsa.dev/provenance/v1`); CycloneDX 1.6 SBOM (`https://cyclonedx.org/bom`); Grype vuln scan (`https://in-toto.io/attestation/vulns`); in-toto test-result v0.1 (`https://in-toto.io/attestation/test-result/v0.1`); AI-provenance predicate (vendor-namespaced, git-creep schema) |
 | **Attestations consumed** | None |
 | **Gate / exit criteria** | All five predicate types present in GHCR OCI referrers store for `sha256:<digest>`; `cosign verify-attestation --type slsa` exits 0 against GHCR before INT promotion begins |
 | **Failure behavior** | Reusable workflow fails; promotion blocked; digest remains in GHCR unsigned; developer investigates signing infrastructure |
 
-**ADR refs:** ADR-0002 (SLSA L3), ADR-0003 (CycloneDX 1.6), ADR-0005 (AI-provenance), ADR-0008 (Syft+Grype, NOT trivy-action).
+**ADR refs:** [ADR-0002](/docs/adrs/0002-declare-slsa-build-level-3/) (SLSA L3), [ADR-0003](/docs/adrs/0003-sbom-format-cyclonedx-spdx-oci-referrers/) (CycloneDX 1.6), [ADR-0005](/docs/adrs/0005-ai-provenance-git-trailers/) (AI-provenance), [ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/) (Syft+Grype, NOT trivy-action).
 
 **SLSA L3 isolation requirement:** `actions/attest-build-provenance` gives L2 by default; L3 additionally requires provenance generation in a **separately-hosted reusable workflow** the developer cannot influence. Keyless OIDC ephemeral credentials already satisfy key-isolation; the remaining gap is the isolated workflow pattern (f_artifact_attestation_promotion_13, medium-confidence — confirm with GitHub SLSA L3 guide before declaring L3 in a change record).
 
-**Tooling constraint (ADR-0008):** `trivy-action` was supply-chain-compromised March 2026 (CVE-2026-33634, CRITICAL — 76/77 tags poisoned, exfiltrating cloud credentials from CI). Standardize on **Syft** (SBOM) + **Grype** (scan). Pin all security tooling by digest, never mutable tag.
+**Tooling constraint ([ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/)):** `trivy-action` was supply-chain-compromised March 2026 (CVE-2026-33634, CRITICAL — 76/77 tags poisoned, exfiltrating cloud credentials from CI). Standardize on **Syft** (SBOM) + **Grype** (scan). Pin all security tooling by digest, never mutable tag.
 
 **Rekor v2 note:** cosign >= 2.6.0 required; Rekor v2 GA (Oct 2025) introduces annual shard rotation — hardcoded Rekor URLs break on older clients. Require `cosign version` >= 2.6.0 + `cosign initialize` (TUF root) in all workflows.
 
@@ -140,9 +140,9 @@ conformance with the probes under `conformance/` — independent of this corpus.
 | **Gate / exit criteria** | `cosign verify-attestation` exits 0 on ECR INT URI; ArgoCD INT app status = `Synced+Healthy`; smoke tests pass |
 | **Failure behavior** | Promotion workflow fails; no ECR tag applied; ArgoCD keeps prior digest; failure comment posted to promotion Issue thread |
 
-**ADR refs:** ADR-0001 (carry referrers — closes crane-cp orphaning gap).
+**ADR refs:** [ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/) (carry referrers — closes crane-cp orphaning gap).
 
-**The crane-cp gap (ADR-0001):** A naive `crane cp <src>@<digest> <dst>:<tag>` + `crane digest` verify copies manifest+layers only — OCI referrers (signatures, SLSA, SBOM) are **not carried** (f_artifact_attestation_promotion_3). Fix options in preference order:
+**The crane-cp gap ([ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/)):** A naive `crane cp <src>@<digest> <dst>:<tag>` + `crane digest` verify copies manifest+layers only — OCI referrers (signatures, SLSA, SBOM) are **not carried** (f_artifact_attestation_promotion_3). Fix options in preference order:
 
 1. ECR managed signing + referrer-aware cross-region replication (Path B — signature only; DSSE predicates still need `cosign copy`)
 2. `cosign copy --only=sig,att,sbom` as explicit post-crane-cp step (Path A)
@@ -232,7 +232,7 @@ still produces the same change record retrospectively for SOC2 CC7.3 / CC8.1 evi
 | **Gate / exit criteria** | `cosign verify-attestation` exits 0 on ECR PROD URI; GitOps PR merged to the GitOps repo; Argo CD PROD app status = `Synced` (pending rollout) |
 | **Failure behavior** | Promotion workflow fails; no GitOps commit; PROD cluster unchanged; CCAB ticket updated with failure; incident process triggered if PROD is in degraded state |
 
-**ADR refs:** ADR-0001 (referrer-aware copy applied).
+**ADR refs:** [ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/) (referrer-aware copy applied).
 
 ---
 
@@ -264,7 +264,7 @@ still produces the same change record retrospectively for SOC2 CC7.3 / CC8.1 evi
 | **Gate / exit criteria** | Kyverno webhook returns `Allowed`; pod admitted |
 | **Failure behavior** | Kyverno returns `Deny` with error message; pod rejected; existing pods continue serving; alert fired; root-cause is attestation absence/mismatch in ECR PROD — trace to S6 attestation carry step |
 
-**ADR refs:** ADR-0004 (Kyverno admission-time attestation verification). Note: OPA Gatekeeper, if present for pod security standards, is supplemented — not replaced — by Kyverno's `ImageValidatingPolicy`; the two policies serve different purposes.
+**ADR refs:** [ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/) (Kyverno admission-time attestation verification). Note: OPA Gatekeeper, if present for pod security standards, is supplemented — not replaced — by Kyverno's `ImageValidatingPolicy`; the two policies serve different purposes.
 
 **Rollout sequence:** start Kyverno policy in `Audit` mode (logs but does not deny) across all envs; validate no false positives over one sprint; flip to `Enforce` (`validationActions: [Deny]`, `failurePolicy: Fail`) in non-prod first, then PROD (f_policy_compliance_gates_2).
 
@@ -317,7 +317,7 @@ sequenceDiagram
 
     GHCR->>Step: image manifest + referrers<br/>(sig, SLSA, SBOM, test-result, AI-prov)
     Note over Step: crane cp = manifest+layers ONLY<br/>[CURRENT STATE — breaks invariant (b)]
-    Step->>ECR_N: cosign copy --only=sig,att,sbom<br/>OR oras cp -r<br/>[REQUIRED FIX — ADR-0001]
+    Step->>ECR_N: cosign copy --only=sig,att,sbom<br/>OR oras cp -r<br/>[REQUIRED FIX — [ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/)]
     ECR_N-->>Gate: referrers present in ECR
     Gate->>ECR_N: cosign verify-attestation\n--type slsa\n--certificate-issuer ...\n--certificate-identity-regexp ...
     Gate-->>Step: PASS → continue<br/>FAIL → block promotion
@@ -393,13 +393,13 @@ jobs:
         with:
           cosign-release: v2.6.0   # pin to digest in production
 
-      - name: Install Syft (SBOM) — pinned by digest (ADR-0008)
+      - name: Install Syft (SBOM) — pinned by digest ([ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/))
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh \
             | sh -s -- -b /usr/local/bin v1.5.0
           # TODO: replace URL with digest-pinned download in production
 
-      - name: Install Grype (vuln scan) — pinned by digest (ADR-0008)
+      - name: Install Grype (vuln scan) — pinned by digest ([ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/))
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh \
             | sh -s -- -b /usr/local/bin v0.85.0
@@ -440,7 +440,7 @@ jobs:
             --type https://in-toto.io/attestation/vulns \
             ${{ inputs.image_ref }}@${{ inputs.image_digest }}
 
-      # AI-provenance attest (ADR-0005) — conditional on commit trailers
+      # AI-provenance attest ([ADR-0005](/docs/adrs/0005-ai-provenance-git-trailers/)) — conditional on commit trailers
       - name: Attest AI provenance (if AI trailers present)
         env:
           AI_PROVENANCE_JSON: ${{ toJson(env.AI_PROVENANCE) }}  # set by caller
@@ -461,7 +461,7 @@ jobs:
             ${{ inputs.image_ref }}@${{ inputs.image_digest }}
 ```
 
-### 4.2 Attestation-Preserving Promotion Step (ADR-0001 fix)
+### 4.2 Attestation-Preserving Promotion Step ([ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/) fix)
 
 ```yaml
 # Replaces: crane cp <ghcr>@<digest> <ecr>:<tag>
@@ -486,7 +486,7 @@ jobs:
     echo "ATTESTATION_VERIFIED=true" >> $GITHUB_ENV
 ```
 
-### 4.3 Kyverno ImageValidatingPolicy (Admission Gate — ADR-0004)
+### 4.3 Kyverno ImageValidatingPolicy (Admission Gate — [ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/))
 
 ```yaml
 # cluster-policy-verify-slsa.yaml
@@ -499,7 +499,7 @@ metadata:
     policies.kyverno.io/title: Verify SLSA L3 Provenance at Admission
     policies.kyverno.io/description: >
       Blocks pods whose images lack valid SLSA v1.0 provenance from the
-      authorized GitHub Actions workflow. Satisfies ADR-0004 / SOC2 CC7.2.
+      authorized GitHub Actions workflow. Satisfies [ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/) / SOC2 CC7.2.
 spec:
   # Start: validationActions: [Audit]  — after validation sprint flip to Deny
   validationActions: [Deny]
@@ -609,7 +609,7 @@ promotion:
 | **Grype** | >= 0.85.0, pinned by digest | Vulnerability scanning | Replaces trivy-action; see below |
 | **cosign** | >= 2.6.0 | Image signing + attestation + copy | Rekor v2 shard rotation requires 2.6.0+; `cosign initialize` (TUF root) required in all workflows |
 | **oras** | >= 1.2.0 | OCI referrer-aware copy (alternative to cosign copy) | `oras cp -r` carries full referrer tree |
-| **crane** | Any (existing) | Manifest inspection, digest lookup only | Do NOT use `crane cp` for attestation-bearing promotions (ADR-0001) |
+| **crane** | Any (existing) | Manifest inspection, digest lookup only | Do NOT use `crane cp` for attestation-bearing promotions ([ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/)) |
 | **actions/attest-build-provenance** | v2+ | SLSA L3 provenance (isolated reusable workflow) | Default = L2; L3 requires isolated reusable workflow caller pattern |
 | **Kyverno** | >= 1.12.0 | Admission-time signature + attestation verification | `ImageValidatingPolicy` introduced 2025; OPA Gatekeeper remains for PSS/PSA, supplemented not replaced |
 | **Argo CD** | >= 2.12 (non-prod); dedicated prod instance | GitOps sync | Design §12: separate instances; prod = manual sync, sourceRepos restricted to prod GitOps repos |
@@ -618,7 +618,7 @@ promotion:
 | **Checkov** | >= 3.2.497 | IaC security scan | 1,881 passed / 0 failed baseline (f_supply_chain_security_sbom_4); SARIF output |
 | **Rekor** | v2 (Oct 2025 GA) | Transparency log | Annual shard rotation; cosign >= 2.6.0 handles rotation automatically |
 
-**trivy-action is BANNED (ADR-0008):** CVE-2026-33634 (CRITICAL, March 2026) — 76/77 action tags and all release binaries were supply-chain-compromised, exfiltrating cloud credentials from CI. Any workflow referencing `aquasecurity/trivy-action` must be migrated to Syft+Grype before the next release. Pin all security tooling by digest; `@master` or `@latest` references are prohibited (f_tooling_landscape_build_vs_buy_2).
+**trivy-action is BANNED ([ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/)):** CVE-2026-33634 (CRITICAL, March 2026) — 76/77 action tags and all release binaries were supply-chain-compromised, exfiltrating cloud credentials from CI. Any workflow referencing `aquasecurity/trivy-action` must be migrated to Syft+Grype before the next release. Pin all security tooling by digest; `@master` or `@latest` references are prohibited (f_tooling_landscape_build_vs_buy_2).
 
 **cosign >= 2.6.0 requirement:** Rekor v2 GA (Oct 2025) introduces annual shard rotation. Clients with hardcoded Rekor URLs break silently on shard boundaries. cosign 2.6.0+ handles rotation via TUF root; older versions fail to verify signatures across shard boundaries (f_tooling_landscape_build_vs_buy_5).
 
@@ -628,23 +628,23 @@ promotion:
 
 ### Phase 0 — Close the attestation loop (P0, ~2–3 weeks)
 
-- [ ] **ADR-0001:** Replace `crane cp` with `cosign copy --only=sig,att,sbom` in `promote-int.yml`, `promote-cert.yml`, `promote-prod.yml`
-- [ ] **ADR-0001:** Replace post-promotion `crane digest` gate with `cosign verify-attestation --type slsa`
-- [ ] **ADR-0004:** Deploy Kyverno `ImageValidatingPolicy` in `Audit` mode across all EKS clusters
-- [ ] **ADR-0008:** Audit all workflows for `trivy-action` references; replace with Syft+Grype pinned by digest
-- [ ] **ADR-0008:** Audit all security tool references for mutable tags (`@master`, `@latest`); pin by digest
+- [ ] **[ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/):** Replace `crane cp` with `cosign copy --only=sig,att,sbom` in `promote-int.yml`, `promote-cert.yml`, `promote-prod.yml`
+- [ ] **[ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/):** Replace post-promotion `crane digest` gate with `cosign verify-attestation --type slsa`
+- [ ] **[ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/):** Deploy Kyverno `ImageValidatingPolicy` in `Audit` mode across all EKS clusters
+- [ ] **[ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/):** Audit all workflows for `trivy-action` references; replace with Syft+Grype pinned by digest
+- [ ] **[ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/):** Audit all security tool references for mutable tags (`@master`, `@latest`); pin by digest
 
 ### Phase 1 — Declare and standardize (P1, ~2 weeks)
 
-- [ ] **ADR-0002:** Implement isolated reusable signing workflow (SLSA L3 pattern); verify with GitHub's SLSA verifier
-- [ ] **ADR-0003:** Switch SBOM format to CycloneDX 1.6 primary; add SPDX 2.3 export for procurement; attach to digest via OCI referrers
-- [ ] **ADR-0007:** Codify GitHub Flow branching policy (short-lived branch off `main`; `hotfix/*` fix-forward); document `release/x.y` long-lived branches as the rare exception for genuinely back-supported releases only; record git-flow as the evaluated-and-rejected alternative
-- [ ] **ADR-0004:** Flip Kyverno from `Audit` to `Enforce` in non-prod; validate no false positives over one sprint, then flip in PROD
+- [ ] **[ADR-0002](/docs/adrs/0002-declare-slsa-build-level-3/):** Implement isolated reusable signing workflow (SLSA L3 pattern); verify with GitHub's SLSA verifier
+- [ ] **[ADR-0003](/docs/adrs/0003-sbom-format-cyclonedx-spdx-oci-referrers/):** Switch SBOM format to CycloneDX 1.6 primary; add SPDX 2.3 export for procurement; attach to digest via OCI referrers
+- [ ] **[ADR-0007](/docs/adrs/0007-github-flow-artifact-promotion-branching-policy/):** Codify GitHub Flow branching policy (short-lived branch off `main`; `hotfix/*` fix-forward); document `release/x.y` long-lived branches as the rare exception for genuinely back-supported releases only; record git-flow as the evaluated-and-rejected alternative
+- [ ] **[ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/):** Flip Kyverno from `Audit` to `Enforce` in non-prod; validate no false positives over one sprint, then flip in PROD
 
 ### Phase 2 — Measure and enrich (P2, ~2 weeks)
 
-- [ ] **ADR-0006:** Instrument five DORA events (see §5); define `deploy` = prod digest promotion; add `gate_ccab_duration_seconds` metric
-- [ ] **ADR-0005:** Implement git-creep `prepare-commit-msg` hook (exits 0 on failure, never blocks); add AI-provenance predicate to S2 attest workflow
+- [ ] **[ADR-0006](/docs/adrs/0006-dora-instrumentation-deployment-definition/):** Instrument five DORA events (see §5); define `deploy` = prod digest promotion; add `gate_ccab_duration_seconds` metric
+- [ ] **[ADR-0005](/docs/adrs/0005-ai-provenance-git-trailers/):** Implement git-creep `prepare-commit-msg` hook (exits 0 on failure, never blocks); add AI-provenance predicate to S2 attest workflow
 
 ### Phase 3 — Operationalize resilience (ongoing)
 
@@ -661,14 +661,14 @@ promotion:
 
 | ADR | Title | Priority | Design mandate |
 | --- | --- | --- | --- |
-| **ADR-0001** | Attestation-preserving digest promotion (cosign copy / oras cp -r; post-promote `cosign verify-attestation`) | P0 | Referrer-aware promotion; close the copy-by-digest orphaning failure mode |
-| **ADR-0002** | Declare SLSA Build L3 via isolated reusable signing workflow | P1 | Provenance isolation: L2→L3 upgrade |
-| **ADR-0003** | CycloneDX 1.6 SBOM primary + SPDX export, attached via OCI referrers | P1 | Declare format and attach to digest |
-| **ADR-0004** | Admission-time attestation verification (Kyverno ImageValidatingPolicy, Deny+Fail) | P0 | Enforce attestation at runtime, not by convention |
-| **ADR-0005** | AI-provenance git trailers → SLSA `externalParameters` predicate (git-creep schema) | P2 | AI authorship visible in provenance and DORA cohorts |
-| **ADR-0006** | DORA instrumentation (deployment = prod digest promotion; five-event model) | P2 | Define "deployment" precisely; instrument per-gate latency |
-| **ADR-0007** | GitHub Flow + artifact-promotion branching policy (git-flow recorded as rejected alternative) | P1 | GitHub Flow for continuous delivery; digest is the RC, not a release branch |
-| **ADR-0008** | Syft+Grype; pin all security tooling by digest; trivy-action banned (CVE-2026-33634) | P0 | Supply-chain-safe scanner baseline |
+| **[ADR-0001](/docs/adrs/0001-attestation-preserving-digest-promotion/)** | Attestation-preserving digest promotion (cosign copy / oras cp -r; post-promote `cosign verify-attestation`) | P0 | Referrer-aware promotion; close the copy-by-digest orphaning failure mode |
+| **[ADR-0002](/docs/adrs/0002-declare-slsa-build-level-3/)** | Declare SLSA Build L3 via isolated reusable signing workflow | P1 | Provenance isolation: L2→L3 upgrade |
+| **[ADR-0003](/docs/adrs/0003-sbom-format-cyclonedx-spdx-oci-referrers/)** | CycloneDX 1.6 SBOM primary + SPDX export, attached via OCI referrers | P1 | Declare format and attach to digest |
+| **[ADR-0004](/docs/adrs/0004-admission-time-attestation-verification/)** | Admission-time attestation verification (Kyverno ImageValidatingPolicy, Deny+Fail) | P0 | Enforce attestation at runtime, not by convention |
+| **[ADR-0005](/docs/adrs/0005-ai-provenance-git-trailers/)** | AI-provenance git trailers → SLSA `externalParameters` predicate (git-creep schema) | P2 | AI authorship visible in provenance and DORA cohorts |
+| **[ADR-0006](/docs/adrs/0006-dora-instrumentation-deployment-definition/)** | DORA instrumentation (deployment = prod digest promotion; five-event model) | P2 | Define "deployment" precisely; instrument per-gate latency |
+| **[ADR-0007](/docs/adrs/0007-github-flow-artifact-promotion-branching-policy/)** | GitHub Flow + artifact-promotion branching policy (git-flow recorded as rejected alternative) | P1 | GitHub Flow for continuous delivery; digest is the RC, not a release branch |
+| **[ADR-0008](/docs/adrs/0008-syft-grype-pin-security-tooling-by-digest/)** | Syft+Grype; pin all security tooling by digest; trivy-action banned (CVE-2026-33634) | P0 | Supply-chain-safe scanner baseline |
 
 ---
 
