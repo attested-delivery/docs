@@ -103,6 +103,7 @@ jobs:
           SUBJECT="subject/${SUBJECT_NAME}"
           gh attestation verify "${SUBJECT}" \
             --repo "${GITHUB_REPOSITORY}" \
+            --signer-workflow "${GITHUB_REPOSITORY}/.github/workflows/dast.yml" \
             --predicate-type https://slsa.dev/provenance/v1
           gh attestation verify "${SUBJECT}" \
             --owner "${OWNER}" \
