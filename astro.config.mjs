@@ -47,6 +47,7 @@ export default defineConfig({
             { label: 'Honest DORA: Defining Deployment', link: '/concepts/08-honest-dora-defining-deployment/' },
             { label: 'AI Authorship Provenance', link: '/concepts/09-ai-authorship-provenance/' },
             { label: 'Observability for a Delivery Pipeline', link: '/concepts/10-observability-for-a-delivery-pipeline/' },
+            { label: 'Verify Every External Fetch', link: '/concepts/11-verify-every-external-fetch/' },
           ],
         },
         {
