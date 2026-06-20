@@ -102,7 +102,9 @@ jobs:
         with:
           name: github-pages
           path: ${{ runner.temp }}/artifact.tar
-          retention-days: 1
+          # 90 (public-repo max) so the published SECURITY.md verification
+          # commands keep working long after the deploy, not just for ~24h.
+          retention-days: 90
           if-no-files-found: error
 
   # Fail-closed gate: an unverifiable artifact does not deploy. Re-verifies the
