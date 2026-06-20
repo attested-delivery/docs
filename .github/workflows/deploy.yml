@@ -107,11 +107,41 @@ jobs:
           retention-days: 90
           if-no-files-found: error
 
+  # SAST gate — CodeQL over the site source, SARIF exposed for the seam.
+  gate-sast:
+    needs: pin-check
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+      packages: read
+    # attested-delivery/.github main @ 698148e (post-#4, 2026-06-19)
+    uses: attested-delivery/.github/.github/workflows/reusable-sast-codeql.yml@698148e12da113cfeeef8742c31ae93657959e67
+    with:
+      languages: javascript-typescript
+      build-mode: none
+
+  # Seam — sign the SAST verdict (sast/v1) bound to the published Pages artifact.
+  attest-sast:
+    needs: [build, gate-sast]
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+    # attested-delivery/.github main @ 698148e (post-#4, 2026-06-19)
+    uses: attested-delivery/.github/.github/workflows/reusable-attest-scan.yml@698148e12da113cfeeef8742c31ae93657959e67
+    with:
+      subject-name: artifact.tar
+      subject-digest: sha256:${{ needs.build.outputs.artifact-digest }}
+      predicate-type: https://attested-delivery.github.io/attestations/sast/v1
+      predicate-artifact: ${{ needs.gate-sast.outputs.sarif-artifact }}
+      predicate-filename: ${{ needs.gate-sast.outputs.sarif-filename }}
+
   # Fail-closed gate: an unverifiable artifact does not deploy. Re-verifies the
-  # SLSA provenance and the CycloneDX SBOM against the artifact's digest before
-  # the deploy job is allowed to run.
+  # SLSA provenance, the CycloneDX SBOM, and the seam-signed SAST verdict against
+  # the artifact's digest before the deploy job is allowed to run.
   verify:
-    needs: build
+    needs: [build, attest-sast]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -121,9 +151,11 @@ jobs:
         with:
           name: github-pages
           path: artifact
-      - name: Verify provenance + SBOM (fail-closed)
+      - name: Verify provenance + SBOM + SAST (fail-closed)
         env:
           GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+          SEAM: attested-delivery/.github/.github/workflows/reusable-attest-scan.yml
         run: |
           set -euo pipefail
           gh attestation verify artifact/artifact.tar \
@@ -134,7 +166,11 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --signer-workflow "${GITHUB_REPOSITORY}/.github/workflows/deploy.yml" \
             --predicate-type https://cyclonedx.org/bom
-          echo "Verified: SLSA provenance + CycloneDX SBOM for ${{ needs.build.outputs.artifact-digest }}"
+          gh attestation verify artifact/artifact.tar \
+            --owner "${OWNER}" \
+            --signer-workflow "${SEAM}" \
+            --predicate-type https://attested-delivery.github.io/attestations/sast/v1
+          echo "Verified: SLSA provenance + CycloneDX SBOM + SAST (sast/v1) for ${{ needs.build.outputs.artifact-digest }}"
 
   deploy:
     needs: verify
