@@ -47,9 +47,11 @@ For every option-3 fetch: run under `set -euo pipefail`; resolve the digest/SHA 
 set -euo pipefail
 VERSION="1.7.7"
 SHA256="<sha256 of the pinned release artifact, from its published checksums>"
+mkdir -p "${RUNNER_TEMP}/bin"
 curl -sSfL -o tool.tar.gz "https://…/v${VERSION}/tool_${VERSION}_linux_amd64.tar.gz"
 echo "${SHA256}  tool.tar.gz" | sha256sum -c -   # aborts the job on mismatch
-tar xzf tool.tar.gz -C /usr/local/bin tool
+tar xzf tool.tar.gz -C "${RUNNER_TEMP}/bin" tool
+echo "${RUNNER_TEMP}/bin" >> "${GITHUB_PATH}"      # on PATH for later steps, no sudo
 ```
 
 ## Package-manager installs use lockfile / registry integrity
