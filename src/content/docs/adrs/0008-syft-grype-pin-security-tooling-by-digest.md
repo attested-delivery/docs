@@ -1,6 +1,7 @@
 ---
 title: "ADR 0008: Syft + Grype as Security Toolchain; Pin All Security Tooling by Digest"
 description: "Pins Syft and Grype by digest rather than tag to prevent supply-chain compromise via mutable security tooling tags."
+diataxis_type: explanation
 ---
 
 Status: Accepted

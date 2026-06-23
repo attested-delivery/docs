@@ -1,6 +1,7 @@
 ---
 title: "Observability for a Delivery Pipeline, Not Just the App"
 description: "A signal catalog for the pipeline itself: what each signal is, which stage emits it, who consumes it, and what to alert on. Built on OpenTelemetry cicd semconv where it exists, honest where it does not."
+diataxis_type: explanation
 ---
 
 You can see every span your application emits in production and still be blind to your delivery pipeline. When a deploy stalls, when an attestation fails to verify, when a restore drill quietly stops running, there is often no signal at all — because nobody instrumented the pipeline the way they instrumented the app. The pipeline is software too. It deserves a signal catalog.

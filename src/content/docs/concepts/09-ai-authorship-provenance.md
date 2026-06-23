@@ -1,6 +1,7 @@
 ---
 title: "Recording AI Authorship in Provenance"
 description: "Co-authored-by is the wrong trailer for AI. Use a dedicated Assisted-by trailer, carry it into SLSA externalParameters, and anchor autonomous builds with OIDC."
+diataxis_type: explanation
 ---
 
 A developer accepts a few AI completions, finishes the change by hand, and commits. The editor quietly adds `Co-authored-by: Copilot` to the message. The developer never typed that line, never reviewed it, and in some cases had AI features explicitly turned off. That is not a hypothetical. It is the kind of provenance you cannot trust, and it is the reason "just use co-authored-by" is the wrong answer for recording AI involvement.

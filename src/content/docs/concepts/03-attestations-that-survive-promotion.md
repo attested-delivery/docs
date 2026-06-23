@@ -1,6 +1,7 @@
 ---
 title: "Attestations That Survive Promotion"
 description: "Signatures, SBOMs, and SLSA provenance attach to an image as separate OCI referrer manifests, not as layers. Copy the image by digest the naive way and you orphan all of it. Here is the trap and the fix."
+diataxis_type: explanation
 ---
 
 You sign your images. You generate a software bill of materials. You attach SLSA provenance. Then you promote the image from your build registry to your production registry, by digest, the obvious way — and the deploy-time verification gate rejects it because none of the evidence is there. The image arrived. The signatures, the SBOM, and the provenance did not.

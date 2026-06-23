@@ -1,6 +1,7 @@
 ---
 title: "ADR 0002: Declare SLSA Build Level 3 via Isolated Reusable Signing Workflow"
 description: "Declares SLSA Build Level 3 by isolating the build-and-sign step into a reusable GitHub Actions workflow with an ephemeral Sigstore Fulcio identity."
+diataxis_type: explanation
 ---
 
 Status: Accepted

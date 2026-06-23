@@ -1,6 +1,7 @@
 ---
 title: "ADR 0006: DORA Instrumentation — Deployment Definition and Five-Event Pipeline"
 description: "Defines a deployment as a production digest promotion event and instruments all five DORA metrics with AI-cohort segmentation."
+diataxis_type: explanation
 ---
 
 Status: Accepted

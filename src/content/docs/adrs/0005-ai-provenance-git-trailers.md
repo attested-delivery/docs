@@ -1,6 +1,7 @@
 ---
 title: "ADR 0005: AI Provenance via git-creep Trailers Injected into SLSA externalParameters"
 description: "Records AI authorship in git trailers using a dedicated Assisted-by field and propagates it into SLSA externalParameters for verifiable AI provenance."
+diataxis_type: explanation
 ---
 
 Status: Accepted

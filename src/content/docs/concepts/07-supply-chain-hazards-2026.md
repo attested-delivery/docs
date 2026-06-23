@@ -1,6 +1,7 @@
 ---
 title: "Supply-Chain Hazards That Got Real in 2026"
 description: "The trivy-action compromise, why mutable tags are the bug, the Rekor v2 shard rotation that breaks old cosign, and how promotion silently orphans your attestations."
+diataxis_type: explanation
 ---
 
 For a long time "supply-chain security" was an abstraction you nodded at in a threat model and then ignored. In March 2026 it stopped being abstract. The tool a lot of teams use to scan their images for vulnerabilities was turned into a credential thief, and it happened through a mechanism every CI pipeline relies on without thinking: the mutable git tag. Here are the hazards that became concrete this year and the specific changes that defend against each.

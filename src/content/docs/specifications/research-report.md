@@ -1,6 +1,7 @@
 ---
 title: "Research Report"
 description: "Comprehensive research report on enterprise-grade SDLC on GitHub Flow with attested artifact promotion, SBOM, and supply-chain security."
+diataxis_type: explanation
 ---
 
 **Research ID:** `enterprise-sdlc-gitflow-attestation`

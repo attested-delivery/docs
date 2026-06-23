@@ -1,6 +1,7 @@
 ---
 title: "The Digest Is the Release"
 description: "A container tag is a mutable pointer. The thing you verified and the thing you run can silently differ. Identify the release by its content digest instead, build once, and promote that exact digest everywhere."
+diataxis_type: explanation
 ---
 
 A team I worked with chased a production bug for two days. The image tag in the cluster matched the tag they had tested. The behavior did not. Somewhere between the test environment and production, `myservice:release-2026.05` had been rebuilt, and the rebuild pulled a transitive dependency that had shipped a regression that morning. Same tag. Different bytes. Nobody lied; the tag just moved.
