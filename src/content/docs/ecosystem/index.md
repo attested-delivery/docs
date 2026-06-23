@@ -71,7 +71,7 @@ The in-site documentation is organized by the [Diátaxis](https://diataxis.fr/) 
 | --- | --- |
 | [Quality gate workflows](/docs/reference/quality-gate-workflows/) | SAST, SCA, container, IaC, posture, and DAST reusable workflow contracts |
 | [Signing and verification workflows](/docs/reference/signing-and-verification-workflows/) | `reusable-attest-scan`, `sign-and-attest`, `verify-attestation`, and `reusable-verify-gates` contracts |
-| [CI and pinning workflows](/docs/reference/ci-and-pinning-workflows/) | `pin-check`, `actionlint`, and dependency-review contracts |
+| [CI and pinning workflows](/docs/reference/ci-and-pinning-workflows/) | `pin-check`, `actionlint`, and `catalog-check` contracts |
 | [Catalog updater](/docs/reference/catalog-updater/) | How the `.github` reusable catalog is versioned and how callers update their SHA pins |
 
 ### Explanation — Understanding
