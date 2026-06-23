@@ -7,7 +7,7 @@ diataxis_goal: "A release's SLSA provenance, signature, SBOM, and gate-verdict a
 
 In-pipeline green is necessary, but it is not the acceptance test. The acceptance test is independent verification: downloading the artifact and running `gh attestation verify` from a clean workstation against the published digest. This guide walks through that process for each attestation type produced by the attested-delivery pipeline.
 
-For the concepts behind why independent verification matters, see [Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion) and [SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free).
+For the concepts behind why independent verification matters, see [Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion/) and [SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free/).
 
 ## Prerequisites
 
@@ -173,8 +173,8 @@ gh api repos/attested-delivery/<repo>/attestations/${DIGEST} \
 
 - [Reference: Signing and Verification Workflows](/docs/reference/signing-and-verification-workflows/)
 - [Reference: Quality-Gate Workflows](/docs/reference/quality-gate-workflows/)
-- [Concept: Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion)
-- [Concept: SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free)
-- [Concept: An SBOM You Can Actually Use](/docs/concepts/06-an-sbom-you-can-actually-use)
-- [How to Wire Attested Quality Gates into a Repository](/docs/guides/onboard-a-repo)
-- [How to Promote a Build](/docs/guides/promote-a-build)
+- [Concept: Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion/)
+- [Concept: SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free/)
+- [Concept: An SBOM You Can Actually Use](/docs/concepts/06-an-sbom-you-can-actually-use/)
+- [How to Wire Attested Quality Gates into a Repository](/docs/guides/onboard-a-repo/)
+- [How to Promote a Build](/docs/guides/promote-a-build/)

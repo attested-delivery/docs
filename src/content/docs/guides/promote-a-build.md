@@ -7,7 +7,7 @@ diataxis_goal: "A build produced in CI is promoted through staging and into prod
 
 Promotion means moving the exact digest that CI built, signed, and attested from one environment to the next. It never means rebuilding. A rebuild produces a new digest and orphans every attestation made about the old one.
 
-For the concepts behind this constraint, see [The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release) and [Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion).
+For the concepts behind this constraint, see [The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release/) and [Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion/).
 
 ## Prerequisites
 
@@ -79,7 +79,7 @@ cosign verify-attestation "${DEST}" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com
 ```
 
-If the gate-verdict attestations (SAST, SCA, etc.) are required at the destination, verify each one as well. See [How to Verify a Release](/docs/guides/verify-a-release) for the per-gate commands.
+If the gate-verdict attestations (SAST, SCA, etc.) are required at the destination, verify each one as well. See [How to Verify a Release](/docs/guides/verify-a-release/) for the per-gate commands.
 
 ## 4. Wire the verification step into your promotion workflow
 
@@ -144,9 +144,9 @@ cosign triangulate "<dest-registry>/attested-delivery/<repo>@${DIGEST}"
 ## Related
 
 - [Reference: Signing and Verification Workflows](/docs/reference/signing-and-verification-workflows/)
-- [Concept: The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release)
-- [Concept: Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion)
-- [Concept: Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention)
-- [Concept: Honest DORA — Defining Deployment](/docs/concepts/08-honest-dora-defining-deployment)
-- [How to Verify a Release](/docs/guides/verify-a-release)
-- [How to Wire Attested Quality Gates into a Repository](/docs/guides/onboard-a-repo)
+- [Concept: The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release/)
+- [Concept: Attestations That Survive Promotion](/docs/concepts/03-attestations-that-survive-promotion/)
+- [Concept: Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention/)
+- [Concept: Honest DORA — Defining Deployment](/docs/concepts/08-honest-dora-defining-deployment/)
+- [How to Verify a Release](/docs/guides/verify-a-release/)
+- [How to Wire Attested Quality Gates into a Repository](/docs/guides/onboard-a-repo/)

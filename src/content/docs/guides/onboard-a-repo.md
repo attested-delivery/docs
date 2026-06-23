@@ -7,7 +7,7 @@ diataxis_goal: "A repository is onboarded with all in-scope quality gates wired 
 
 This guide walks you through onboarding a repository to the attested quality-gate architecture. When complete, every CI run produces signed, digest-bound attestations for each gate verdict, and your deploy job refuses to proceed without verifying them.
 
-For the rationale behind this architecture, see [The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release) and [Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention).
+For the rationale behind this architecture, see [The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release/) and [Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention/).
 
 If you prefer an assisted path, the `/gh-attested` skill in Claude Code assesses, plans, and implements this end-to-end for a public open-source repo.
 
@@ -189,7 +189,7 @@ See the [interface contracts](/docs/specifications/interface-contracts/) spec an
 
 ## 7. Publish a SECURITY.md with verification instructions
 
-Consumers of your repo need to know how to verify releases independently. Add a `SECURITY.md` with the verification commands from [How to Verify a Release](/docs/guides/verify-a-release).
+Consumers of your repo need to know how to verify releases independently. Add a `SECURITY.md` with the verification commands from [How to Verify a Release](/docs/guides/verify-a-release/).
 
 ## Verification
 
@@ -219,8 +219,8 @@ Expected output: `✓ Verification succeeded!`. If the workflow ran but no attes
 
 - [Reference: Quality-Gate Workflows](/docs/reference/quality-gate-workflows/)
 - [Reference: Signing and Verification Workflows](/docs/reference/signing-and-verification-workflows/)
-- [Concept: The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release)
-- [Concept: Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention)
-- [Concept: SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free)
-- [How to Verify a Release](/docs/guides/verify-a-release)
-- [How to Promote a Build](/docs/guides/promote-a-build)
+- [Concept: The Digest Is the Release](/docs/concepts/01-the-digest-is-the-release/)
+- [Concept: Enforce at Admission, Not by Convention](/docs/concepts/04-enforce-at-admission-not-by-convention/)
+- [Concept: SLSA L3 Is Nearly Free](/docs/concepts/05-slsa-l3-is-nearly-free/)
+- [How to Verify a Release](/docs/guides/verify-a-release/)
+- [How to Promote a Build](/docs/guides/promote-a-build/)
