@@ -1,6 +1,7 @@
 ---
 title: "Honest DORA: Define a Deployment First"
 description: "Every DORA metric counts deployments, but DORA never defines one. Pin it down, instrument all five metrics, decompose lead time per gate, and segment by AI cohort."
+diataxis_type: explanation
 ---
 
 Two teams report deployment frequency. One counts every merge to `main`. The other counts only the moment a verified artifact reaches a healthy running state in production. Their numbers are not comparable, and neither is wrong — they are answering different questions while using the same word. This is the quiet flaw in most DORA dashboards: every metric is built on "a deployment," and almost nobody defines what that is.

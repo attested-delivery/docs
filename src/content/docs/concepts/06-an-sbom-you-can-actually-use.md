@@ -1,6 +1,7 @@
 ---
 title: "An SBOM You Can Actually Use"
 description: "Pick a real SBOM format, attach it to the image digest, and keep producing one even though the federal mandate is gone."
+diataxis_type: explanation
 ---
 
 A vulnerability advisory lands for a transitive dependency you have never heard of. Someone asks the only question that matters: are we running it, and where? If your answer is "let me rebuild every image and rescan," you have already lost the afternoon. A software bill of materials exists to make that question answerable in seconds instead of hours. Most SBOMs fail at this because they are generated against a moving tag, stored in a wiki, and never looked at again.

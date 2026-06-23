@@ -1,6 +1,7 @@
 ---
 title: "GitHub Flow over Git-Flow, and What the Release Candidate Actually Is"
 description: "For a continuously delivered single-version service, the branching model is GitHub Flow and the release candidate is an attested image digest, not a release branch. Git-flow still earns its keep — for a different problem."
+diataxis_type: explanation
 ---
 
 Pick a branching model and you have quietly decided where your release lives, what it is made of, and how it moves to production. Most arguments about git-flow versus GitHub Flow skip that part and fight about branch diagrams. The diagram matters less than one question: when you say "the release candidate," what concrete thing are you pointing at?

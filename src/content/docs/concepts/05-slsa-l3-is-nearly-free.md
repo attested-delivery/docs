@@ -1,6 +1,7 @@
 ---
 title: "SLSA Build Level 3 Is Nearly Free"
 description: "If you already build with GitHub Artifact Attestations you are at SLSA Build Level 2. Getting to Level 3 is mostly a refactor: move the build-and-sign step into an isolated reusable workflow. Then declare your level and your SBOM format out loud."
+diataxis_type: explanation
 ---
 
 SLSA Build Level 3 sounds like a project. People hear "hardened builds" and imagine a dedicated isolated builder, a key management ceremony, an audit. If you build on GitHub Actions with Artifact Attestations, the reality is closer to a refactor you can land in an afternoon. You are most likely already at Level 2; the gap to Level 3 is one structural change to your workflow.
