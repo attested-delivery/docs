@@ -55,11 +55,12 @@ gh attestation verify "oci://ghcr.io/attested-delivery/<repo>@${DIGEST}" \
 
 ### Binaries and bundles
 
-For static artifacts, provenance is signed by the repo's own release workflow (not the central signer). Pin `--signer-workflow` to that workflow — with `--repo` alone, any provenance producer in the repo (e.g. `dast.yml`) would satisfy the check (CLAUDE.md §5):
+For static artifacts, provenance is signed by the repo's own release workflow (not the central signer). Pin both `--signer-workflow` and `--predicate-type` — with `--repo` alone, any provenance producer in the repo (e.g. `dast.yml`) would satisfy the check:
 
 ```sh
 gh attestation verify <binary> --repo attested-delivery/<repo> \
-  --signer-workflow attested-delivery/<repo>/.github/workflows/release.yml
+  --signer-workflow attested-delivery/<repo>/.github/workflows/release.yml \
+  --predicate-type https://slsa.dev/provenance/v1
 ```
 
 Expected output for both: `✓ Verification succeeded!`
@@ -154,7 +155,7 @@ As a negative-path spot-check, run the same verify commands against an unrelated
 
 **`gh attestation verify` returns "no attestations found".** The release may not have completed the sign/attest jobs, or the digest you resolved does not match the one used during signing. Confirm the digest by inspecting the release workflow run in the Actions tab.
 
-**`gh attestation verify` fails with a signer mismatch.** For container images, you may have omitted `--signer-workflow` or pointed it at the wrong workflow. Under SLSA L3 the cert SAN is the signer workflow, not the source repo — `--repo` alone is insufficient. For binary/bundle attestations from the repo's own workflow, do not pass `--signer-workflow` at all.
+**`gh attestation verify` fails with a signer mismatch.** For container images, you may have omitted `--signer-workflow` or pointed it at the wrong workflow. Under SLSA L3 the cert SAN is the signer workflow, not the source repo — `--repo` alone is insufficient. For binary/bundle attestations, pin `--signer-workflow` to the repo's release workflow — `--repo` alone is less specific and can be satisfied by any provenance producer in the repo.
 
 **`cosign verify` fails with a certificate identity mismatch.** The regexp must escape the `.` characters in the workflow path. Confirm the regexp exactly matches the path `attested-delivery/.github/.github/workflows/sign-and-attest.yml`. Backslash-escape `.` as `\.`.
 

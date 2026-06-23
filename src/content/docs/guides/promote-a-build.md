@@ -97,7 +97,7 @@ jobs:
       contents: read
       packages: read
       attestations: read
-    uses: attested-delivery/.github/.github/workflows/verify-attestation.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/verify-attestation.yml@<DOTGITHUB_SHA> # vX.Y.Z
     with:
       image-ref: <dest-registry>/attested-delivery/<repo>@${{ needs.promote.outputs.digest }}
       attestation-repo: attested-delivery/<repo>
