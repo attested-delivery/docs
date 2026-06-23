@@ -34,6 +34,30 @@ export default defineConfig({
       },
       sidebar: [
         { label: 'Overview', link: '/overview/' },
+        { label: 'Ecosystem Hub', link: '/ecosystem/' },
+        {
+          label: 'Tutorials',
+          items: [
+            { label: 'Verify Your First Attested Release', link: '/tutorials/verify-your-first-attested-release/' },
+          ],
+        },
+        {
+          label: 'How-to Guides',
+          items: [
+            { label: 'Onboard a Repo', link: '/guides/onboard-a-repo/' },
+            { label: 'Verify a Release', link: '/guides/verify-a-release/' },
+            { label: 'Promote a Build', link: '/guides/promote-a-build/' },
+          ],
+        },
+        {
+          label: 'Reference',
+          items: [
+            { label: 'Quality-Gate Workflows', link: '/reference/quality-gate-workflows/' },
+            { label: 'Signing & Verification Workflows', link: '/reference/signing-and-verification-workflows/' },
+            { label: 'CI & Pinning Workflows', link: '/reference/ci-and-pinning-workflows/' },
+            { label: 'Catalog Updater', link: '/reference/catalog-updater/' },
+          ],
+        },
         {
           label: 'Concepts',
           items: [

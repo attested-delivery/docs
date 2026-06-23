@@ -1,6 +1,7 @@
 ---
 title: "Enforce at Admission, Not by Convention"
 description: "A signature created in CI is a claim, not a guarantee that the signed image is the one running in your cluster. The difference is where you enforce. Put a deny-by-default, fail-closed check at the admission boundary."
+diataxis_type: explanation
 ---
 
 Your CI pipeline signs every image it builds. Good. Now answer this: what stops someone from `kubectl apply`-ing a different, unsigned image straight into the cluster? If the answer is "nobody would do that" or "our deploy script always signs," you have a convention, not a control. The signature your pipeline produced is sitting in a registry, and nothing is forcing the path into your cluster to consult it.

@@ -1,6 +1,7 @@
 ---
 title: "Promotion Attestation Pipeline Specification"
 description: "Specification for the referrer-aware OCI promotion pipeline that carries SLSA provenance, SBOM, and signatures across registry boundaries."
+diataxis_type: reference
 ---
 
 **Document type:** Implementation-Actionable Derived Artifact (corpus-internal)

@@ -1,6 +1,7 @@
 ---
 title: "Production Readiness Attestation Gates"
 description: "Specification of the fail-closed attestation gates that must pass before a digest is admitted to production."
+diataxis_type: reference
 ---
 
 **Document type:** Implementation-actionable design guide (corpus-internal)

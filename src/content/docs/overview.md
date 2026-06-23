@@ -1,6 +1,7 @@
 ---
 title: "Overview"
 description: "What attested delivery is, the three pillars it is built on, and how the documentation sections fit together."
+diataxis_type: explanation
 ---
 
 ## What is attested delivery?

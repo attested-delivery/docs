@@ -1,6 +1,7 @@
 ---
 title: "Verify Every External Fetch"
 description: "A build is only as trustworthy as what enters it. Every workflow step that downloads or installs a package, binary, or tool must pin an exact version, verify integrity, and fail closed on mismatch — with a preference ladder that prefers the runner first."
+diataxis_type: explanation
 ---
 
 The organization's promise is that *the thing you verified is the thing that runs*. That promise is worth nothing if the build itself was assembled from untrusted bytes. Every step that pulls something external into a job — a release tarball, a `go install`, a `curl … | sh` bootstrap, an unpinned `cargo install` — is a supply-chain entry point. If any one of them can be silently swapped, an attacker does not need to break your signing: they poison the input *before* you sign it, and your attestation faithfully certifies the compromised result.

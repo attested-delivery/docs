@@ -1,6 +1,7 @@
 ---
 title: "ADR 0003: SBOM Format — CycloneDX 1.6 Primary + SPDX 2.3/3.0 Export via OCI Referrers"
 description: "Selects CycloneDX 1.6 as primary SBOM format with SPDX 2.3 as secondary, stored as OCI referrers using the cosign SBOM attestation type."
+diataxis_type: explanation
 ---
 
 Status: Accepted

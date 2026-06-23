@@ -1,6 +1,7 @@
 ---
 title: "Interface Contracts"
 description: "Formal interface contracts for the attested delivery pipeline components including registry APIs, attestation schemas, and admission webhook contracts."
+diataxis_type: reference
 ---
 
 This document is the authoritative, **recipient-independent** definition of the integration boundaries of the

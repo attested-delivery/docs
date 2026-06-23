@@ -1,6 +1,7 @@
 ---
 title: "ADR 0004: Admission-Time Attestation Verification via Kyverno ImageValidatingPolicy"
 description: "Enforces a deny-by-default Kubernetes admission webhook that rejects any workload whose image lacks a valid signature and required SLSA provenance and SBOM attestations."
+diataxis_type: explanation
 ---
 
 Status: Accepted
