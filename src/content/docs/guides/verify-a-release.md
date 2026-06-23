@@ -92,6 +92,7 @@ cosign verify-attestation "ghcr.io/attested-delivery/<repo>@${DIGEST}" \
 
 ```sh
 gh attestation verify <binary> --repo attested-delivery/<repo> \
+  --signer-workflow attested-delivery/<repo>/.github/workflows/release.yml \
   --predicate-type https://cyclonedx.org/bom
 ```
 
