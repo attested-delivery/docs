@@ -17,7 +17,7 @@ export default defineConfig({
     starlight({
       title: 'Attested Delivery',
       description: 'Documentation for the attested-delivery GitHub organization: signed, SLSA-attested, fail-closed-verified releases.',
-      logo: { src: './src/assets/logo-mark.svg' },
+      logo: { src: './src/assets/logo.svg', replacesTitle: true },
       favicon: '/favicon.svg',
       customCss: ['./src/styles/brand.css'],
       social: [

@@ -1,5 +1,5 @@
 ---
-title: Attested Delivery
+title: attested-delivery
 description: Signed, SLSA-attested, fail-closed-verified releases for every artifact.
 template: splash
 hero:
@@ -9,9 +9,14 @@ hero:
       link: /docs/overview/
       icon: right-arrow
       variant: primary
-    - text: View Concepts
-      link: /docs/concepts/01-the-digest-is-the-release/
+    - text: Verify a Release
+      link: /docs/tutorials/verify-your-first-attested-release/
       icon: open-book
+      variant: minimal
+    - text: Ecosystem Hub
+      link: /docs/ecosystem/
+      icon: right-arrow
+      variant: minimal
 ---
 
 ## The core invariant
@@ -20,6 +25,12 @@ An artifact reaches consumers only if it is byte-identical to what was validated
 
 ## What you will find here
 
-- **[Concepts](/docs/concepts/01-the-digest-is-the-release/)** — ten focused articles on the design decisions behind attested delivery: digest identity, GitHub Flow, attestation survival across registry hops, admission enforcement, SLSA levels, SBOMs, supply-chain hazards, DORA, AI provenance, and pipeline observability.
-- **[Specifications](/docs/specifications/research-report/)** — formal specs for the promotion pipeline, interface contracts, production readiness gates, and GitHub-native quality gates.
-- **[Architecture Decisions](/docs/adrs/0001-attestation-preserving-digest-promotion/)** — eight ADRs recording the rationale behind every significant technical choice, from digest promotion to security tooling pins.
+The documentation is organized by [Diátaxis](https://diataxis.fr/) — learning, tasks, reference, and understanding kept separate.
+
+- **[Ecosystem Hub](/docs/ecosystem/)** — the map of the whole ecosystem: every repo, template, and tool, with links out to each one's own docs.
+- **[Tutorial](/docs/tutorials/verify-your-first-attested-release/)** — verify your first attested release, hands-on, from a clean workstation.
+- **[How-to Guides](/docs/guides/onboard-a-repo/)** — onboard a repo to the quality gates, verify a release independently, and promote a build by digest.
+- **[Reference](/docs/reference/quality-gate-workflows/)** — the central reusable workflows, the signing/verification seam, and the catalog-updater, contract by contract.
+- **[Concepts](/docs/concepts/01-the-digest-is-the-release/)** — focused articles on the design decisions behind attested delivery: digest identity, attestation survival across registry hops, admission enforcement, SLSA levels, SBOMs, supply-chain hazards, DORA, AI provenance, and pipeline observability.
+- **[Specifications](/docs/specifications/research-report/)** — formal specs for the promotion pipeline, interface contracts, production-readiness gates, and GitHub-native quality gates.
+- **[Architecture Decisions](/docs/adrs/0001-attestation-preserving-digest-promotion/)** — the ADRs recording the rationale behind every significant technical choice, from digest promotion to security tooling pins.
