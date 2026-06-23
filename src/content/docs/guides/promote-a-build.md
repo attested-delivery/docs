@@ -65,7 +65,7 @@ cosign copy \
 After the copy completes, re-run verification against the destination digest. The digest must be identical to the source digest — attestations are digest-bound and do not transfer if the bytes changed:
 
 ```sh
-DEST="${DEST_REGISTRY}/attested-delivery/<repo>@${DIGEST}"
+DEST="<dest-registry>/attested-delivery/<repo>@${DIGEST}"
 
 gh attestation verify "oci://${DEST}" \
   --repo attested-delivery/<repo> \

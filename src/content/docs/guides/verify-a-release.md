@@ -155,7 +155,7 @@ As a negative-path spot-check, run the same verify commands against an unrelated
 
 **`gh attestation verify` fails with a signer mismatch.** For container images, you may have omitted `--signer-workflow` or pointed it at the wrong workflow. Under SLSA L3 the cert SAN is the signer workflow, not the source repo — `--repo` alone is insufficient. For binary/bundle attestations from the repo's own workflow, do not pass `--signer-workflow` at all.
 
-**`cosign verify` fails with a certificate identity mismatch.** The regexp must escape the `.` characters in the workflow path. Confirm the regexp exactly matches the path `attested-delivery/.github/.github/workflows/sign-and-attest.yml`. Backlash-escape `.` as `\.`.
+**`cosign verify` fails with a certificate identity mismatch.** The regexp must escape the `.` characters in the workflow path. Confirm the regexp exactly matches the path `attested-delivery/.github/.github/workflows/sign-and-attest.yml`. Backslash-escape `.` as `\.`.
 
 **To inspect the raw certificate when verification surprises you:**
 
