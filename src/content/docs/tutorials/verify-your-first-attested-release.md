@@ -70,7 +70,8 @@ Now we ask GitHub to retrieve the attestation bundle for this artifact and verif
 
 ```bash
 gh attestation verify rust-template-0.1.0-linux-amd64 \
-  --repo attested-delivery/rust-template
+  --repo attested-delivery/rust-template \
+  --predicate-type https://slsa.dev/provenance/v1
 ```
 
 The output should look like:

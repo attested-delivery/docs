@@ -55,10 +55,11 @@ gh attestation verify "oci://ghcr.io/attested-delivery/<repo>@${DIGEST}" \
 
 ### Binaries and bundles
 
-For static artifacts attested by the repo's own workflow (not the central signer), omit `--signer-workflow` — the SAN is the repo's own workflow:
+For static artifacts, provenance is signed by the repo's own release workflow (not the central signer). Pin `--signer-workflow` to that workflow — with `--repo` alone, any provenance producer in the repo (e.g. `dast.yml`) would satisfy the check (CLAUDE.md §5):
 
 ```sh
-gh attestation verify <binary> --repo attested-delivery/<repo>
+gh attestation verify <binary> --repo attested-delivery/<repo> \
+  --signer-workflow attested-delivery/<repo>/.github/workflows/release.yml
 ```
 
 Expected output for both: `✓ Verification succeeded!`
@@ -104,7 +105,7 @@ SUBJECT="oci://ghcr.io/attested-delivery/<repo>@${DIGEST}"
 SEAM="attested-delivery/.github/.github/workflows/reusable-attest-scan.yml"
 
 # SAST — swap predicate-type for other seam-signed gates:
-# sca/v1, iac-policy/v1, iac-misconfig/v1, scorecard/v1, dast/v1
+# sca/v1, iac-policy/v1, iac-license/v1, dast/v1
 gh attestation verify "$SUBJECT" \
   --owner attested-delivery \
   --signer-workflow "$SEAM" \

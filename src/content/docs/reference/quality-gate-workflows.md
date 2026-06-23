@@ -63,6 +63,7 @@ jobs:
       security-events: write
       contents: read
       actions: read
+      packages: read
     uses: attested-delivery/.github/.github/workflows/reusable-sast-codeql.yml@<sha>
     with:
       languages: 'javascript-typescript,python'
@@ -128,7 +129,7 @@ jobs:
 Container image vulnerability scan, IaC misconfiguration scan, and license scan via Trivy. The IaC+license job is soft-fail (code-scanning check is the gate); the image job is fail-closed on findings at or above `severity`.
 
 **Predicate types (seam-assigned by caller):**
-- IaC+license: `https://attested-delivery.github.io/attestations/iac-misconfig/v1`
+- IaC+license: `https://attested-delivery.github.io/attestations/iac-license/v1`
 - Container image: caller-assigned predicate for the image SARIF
 
 ### Inputs

@@ -25,7 +25,7 @@ Every `uses:` in your caller must pin the central reusable by the full 40-charac
 gh api repos/attested-delivery/.github/commits/main --jq .sha
 ```
 
-Use this SHA everywhere `<GITHUB_SHA>` appears below. Add a trailing `# vX.Y.Z` comment with the nearest release tag for human readability.
+Use that SHA — the `attested-delivery/.github` **repository's** commit SHA, not your caller repo's `$GITHUB_SHA` — everywhere `<DOTGITHUB_SHA>` appears below. Add a trailing `# vX.Y.Z` comment with the nearest release tag for human readability.
 
 ## 2. Check that the actions you need are on the org allow-list
 
@@ -62,7 +62,7 @@ jobs:
 
   # --- pin-check: required on every push and PR ---
   pin-check:
-    uses: attested-delivery/.github/.github/workflows/pin-check.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/pin-check.yml@<DOTGITHUB_SHA> # vX.Y.Z
     permissions:
       contents: read
 
@@ -73,7 +73,7 @@ jobs:
       contents: read
       actions: read
       packages: read
-    uses: attested-delivery/.github/.github/workflows/reusable-sast-codeql.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/reusable-sast-codeql.yml@<DOTGITHUB_SHA> # vX.Y.Z
     with:
       languages: javascript-typescript   # adjust for your repo
 
@@ -84,7 +84,7 @@ jobs:
       id-token: write
       attestations: write
       contents: read
-    uses: attested-delivery/.github/.github/workflows/reusable-attest-scan.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/reusable-attest-scan.yml@<DOTGITHUB_SHA> # vX.Y.Z
     with:
       subject-name: ghcr.io/attested-delivery/<your-repo>
       subject-digest: ${{ needs.build.outputs.image-digest }}
@@ -103,7 +103,7 @@ jobs:
       contents: read
       attestations: read
       packages: read
-    uses: attested-delivery/.github/.github/workflows/reusable-verify-gates.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/reusable-verify-gates.yml@<DOTGITHUB_SHA> # vX.Y.Z
     with:
       subject-ref: oci://ghcr.io/attested-delivery/<your-repo>@${{ needs.build.outputs.image-digest }}
       owner: attested-delivery
@@ -114,7 +114,7 @@ jobs:
 
   # --- Fail-closed verify: OpenVEX (self-signed — separate call) ---
   # verify-vex:
-  #   uses: attested-delivery/.github/.github/workflows/reusable-verify-gates.yml@<GITHUB_SHA>
+  #   uses: attested-delivery/.github/.github/workflows/reusable-verify-gates.yml@<DOTGITHUB_SHA>
   #   with:
   #     signer-workflow: attested-delivery/.github/.github/workflows/reusable-vex.yml
   #     predicate-types: https://openvex.dev/ns/v0.2.0
@@ -144,7 +144,7 @@ After the gate-attestation jobs, wire `sign-and-attest.yml` to produce the SLSA 
       attestations: write
       packages: write
       contents: read
-    uses: attested-delivery/.github/.github/workflows/sign-and-attest.yml@<GITHUB_SHA> # vX.Y.Z
+    uses: attested-delivery/.github/.github/workflows/sign-and-attest.yml@<DOTGITHUB_SHA> # vX.Y.Z
     with:
       image-name: ghcr.io/attested-delivery/<your-repo>
       image-digest: ${{ needs.build.outputs.image-digest }}
@@ -185,7 +185,7 @@ Emit the following for the repo owner to configure:
 - Require linear history; block force-push to the default branch
 - Required status checks: include each in-scope gate + `pin-check`
 
-See [New-repo onboarding checklist](/docs/specifications/interface-contracts/) and the `RUNBOOK.md` in `attested-delivery/.github` for the full checklist.
+See the [interface contracts](/docs/specifications/interface-contracts/) spec and the `RUNBOOK.md` in `attested-delivery/.github` for the full onboarding checklist.
 
 ## 7. Publish a SECURITY.md with verification instructions
 
