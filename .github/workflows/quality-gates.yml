@@ -46,7 +46,7 @@ jobs:
       security-events: write
       pull-requests: write
     # attested-delivery/.github main @ 698148e (post-#4, 2026-06-19)
-    uses: attested-delivery/.github/.github/workflows/reusable-sca-osv.yml@698148e12da113cfeeef8742c31ae93657959e67
+    uses: attested-delivery/.github/.github/workflows/reusable-sca-osv.yml@78f1933ef020e3d94af848a191297d26e8dc8b4c
     with:
       fail-on-severity: high
 
