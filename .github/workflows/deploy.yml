@@ -35,7 +35,7 @@ jobs:
   pin-check:
     permissions:
       contents: read
-    uses: attested-delivery/.github/.github/workflows/pin-check.yml@0e8ba553a55146eddf66e027f157b3cbb294466a
+    uses: attested-delivery/.github/.github/workflows/pin-check.yml@78f1933ef020e3d94af848a191297d26e8dc8b4c
 
   build:
     needs: pin-check
